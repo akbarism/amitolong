@@ -5,43 +5,16 @@
         <th>contoh soal</th>
         <th>pilihan</th>
       </tr>
-      <tr>
+      <tr v-for="item in items" :key="item.id">
         <td class="soal">ini soal pertama</td>
         <td>
-          <select v-model="a" @change="selectA">
-            <option :value="x" v-for="x in list" :key="x">{{ x }}</option>
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <td class="soal">ini soal kedua</td>
-        <td>
-          <select v-model="b" @change="selectB">
-            <option :value="x" v-for="x in list" :key="x">{{ x }}</option>
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <td class="soal">ini soal ketiga</td>
-        <td>
-          <select v-model="c" @change="selectC">
-            <option :value="x" v-for="x in list" :key="x">{{ x }}</option>
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <td class="soal">ini soal keempat</td>
-        <td>
-          <select v-model="d" @change="selectD">
-            <option :value="x" v-for="x in list" :key="x">{{ x }}</option>
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <td class="soal">ini soal kelima</td>
-        <td>
-          <select v-model="e" @change="selectE">
-            <option :value="x" v-for="x in list" :key="x">{{ x }}</option>
+          <select @change="change">
+            <option value="0">pilih</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
           </select>
         </td>
       </tr>
@@ -53,13 +26,13 @@
           <th>contoh soal</th>
           <th>pilihan</th>
         </tr>
-        <tr>
+        <tr v-for="item in items" :key="item.id">
           <td class="soal">ini soal pertama</td>
           <td>
-            <input type="checkbox" id="checkbox1" @change="check" />
+            <input type="checkbox" :id="item.id" @change="check(item.id)" />
           </td>
         </tr>
-        <tr>
+        <!-- <tr>
           <td class="soal">ini soal kedua</td>
           <td>
             <input type="checkbox" id="checkbox2" @change="check" />
@@ -82,7 +55,7 @@
           <td>
             <input type="checkbox" id="checkbox5" @change="check" />
           </td>
-        </tr>
+        </tr> -->
       </table>
     </div>
   </div>
@@ -93,82 +66,52 @@ export default {
   name: "contoh",
   data() {
     return {
-      list: [1, 2, 3, 4, 5],
-      p: 0,
+      items: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }],
       a: 0,
-      b: 0,
-      c: 0,
-      d: 0,
-      e: 0,
-      temp: []
+      temp: {
+        a: 0,
+        b: 0,
+        c: 0,
+        d: 0,
+        e: 0
+      },
+      ckbx: []
     };
   },
   //   mounted() {
   //     this.check();
   //   },
   methods: {
-    check() {
-      let checkbox1 = document.getElementById("checkbox1");
-      let checkbox2 = document.getElementById("checkbox2");
-      let checkbox3 = document.getElementById("checkbox3");
-      let checkbox4 = document.getElementById("checkbox4");
-      let checkbox5 = document.getElementById("checkbox5");
-      let arrcheck = [checkbox1, checkbox2, checkbox3, checkbox4, checkbox5];
+    change() {
+      //jadi gue mau ngecek kelimanya jangan ada angka yang sama gitu mi
+    },
+    check(item) {
+      let checkbox1 = document.getElementById(item);
+
+      const vm = this;
+      vm.ckbx.push(checkbox1);
+      // console.log(vm.ckbx);
       let flasecheck = [];
       let countTrue = 0;
-      for (let i = 0; i < arrcheck.length; i++) {
-        let checke = arrcheck[i].checked === true;
+      for (let i = 0; i < vm.ckbx.length; i++) {
+        let checke = vm.ckbx[i].checked === true;
+        console.log(vm.ckbx);
         if (checke == true) {
           countTrue = countTrue + 1;
         } else {
-          flasecheck.push(arrcheck[i]);
+          flasecheck.push(vm.ckbx[i]);
+          console.log(flasecheck);
         }
+        console.log(countTrue);
       }
-      if (countTrue >= 3) {
+      if (countTrue >= 1) {
         for (let i = 0; i < flasecheck.length; i++) {
           flasecheck[i].disabled = true;
+          console.log(flasecheck[i]);
         }
       } else {
         for (let i = 0; i < flasecheck.length; i++) {
           flasecheck[i].disabled = false;
-        }
-      }
-    },
-    selectA() {
-      this.temp.push(this.a);
-      this.change();
-    },
-    selectB() {
-      this.temp.push(this.b);
-      this.change();
-    },
-    selectC() {
-      this.temp.push(this.c);
-      this.change();
-    },
-    selectD() {
-      this.temp.push(this.d);
-      this.change();
-    },
-    selectE() {
-      this.temp.push(this.e);
-      this.change();
-    },
-    change() {
-      const vm = this;
-      //   const arr = [vm.a, vm.b, vm.c, vm.d, vm.e];
-      let listArr = [];
-      for (let i = 0; i < vm.temp.length; i++) {
-        listArr.push(vm.temp[i]);
-        console.log(listArr);
-        for (let j = vm.temp[i]; j < vm.temp.length; j++) {
-          console.log(vm.temp);
-          if (vm.temp[i] === vm.temp[j]) {
-            alert("tidak  boleh angka yang sama");
-          } else {
-            listArr.push(vm.temp[j]);
-            console.log(listArr);
-          }
         }
       }
     }
